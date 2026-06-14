@@ -1,0 +1,30 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+
+        <item name="android:windowIsTranslucent">true</item>
+
+        <!-- Фоновой цвет лэйаута -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <!-- Без заголовка окна программы -->
+        <item name="windowNoTitle">true</item>
+
+        <!-- Панель действий -->
+        <item name="windowActionBar">true</item>
+
+        <!-- Пока не понятно -->
+        <item name="android:windowContentOverlay">@null</item>
+
+        <!-- Лэйаут не с левового верхнего угла-->
+        <item name="android:windowIsFloating">false</item>
+
+        <!-- Не приглушать задний фон -->
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <style name="Theme.YNarrows" parent="android:Theme.Material.Light.NoActionBar" />
+
+</resources>
+

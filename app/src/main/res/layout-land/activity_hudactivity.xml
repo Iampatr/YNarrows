@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:color="@color/transparent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/intercepted_notification_logo_container"
+        android:layout_width="900dp"
+        android:layout_height="255dp"
+        android:background="@color/transparent"
+        android:color="@color/transparent"/>
+
+    <FrameLayout
+        android:id="@+id/arrow"
+        android:layout_width="900dp"
+        android:layout_height="141dp"
+        android:background="@color/transparent"
+        android:color="@color/transparent">
+
+        <ImageView
+            android:id="@+id/intercepted_notification_arrow"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="105dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:alpha="0.75"
+            android:contentDescription="@string/Empty"
+             />
+        <ImageView
+            android:id="@+id/intercepted_notification_speed"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="65dp"
+            android:layout_marginTop="105dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:alpha="0.75"
+            android:contentDescription="@string/Empty"
+            android:src="@drawable/camera1"
+            android:visibility="invisible"
+            />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/intercepted_notification_text_container3"
+        android:layout_width="120dp"
+        android:layout_height="19dp"
+        android:background="@color/transparent"
+        android:color="@color/transparent">
+
+        <TextView
+            android:id="@+id/notification_text_dist"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/Empty"
+            android:textColor="@color/white"
+            android:fontFamily="@font/geely_switches"
+            android:textSize="14sp"
+            android:alpha="0.70"
+            android:typeface="monospace"
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="1"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            />
+
+
+        <TextView
+            android:id="@+id/notification_text_camerad"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginStart="75dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/Empty"
+            android:textColor="@color/white"
+            android:fontFamily="@font/geely_switches"
+            android:textSize="14sp"
+            android:alpha="0.70"
+            android:typeface="monospace"
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="1"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            />
+
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/intercepted_notification_text_container4"
+        android:layout_width="160dp"
+        android:layout_height="19dp"
+        android:background="@color/transparent"
+        android:color="@color/transparent">
+
+        <TextView
+            android:id="@+id/notification_text_street"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/Empty"
+            android:textColor="@color/white"
+            android:fontFamily="@font/geely_switches"
+            android:textSize="12sp"
+            android:alpha="0.55"
+            android:typeface="monospace"
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            />
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/intercepted_notification_text_container1"
+        android:layout_width="100dp"
+        android:layout_height="4dp"
+        android:background="@color/transparent"
+        android:color="@color/transparent">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/intercepted_notification_text_container2"
+        android:layout_width="185dp"
+        android:layout_height="16dp"
+        android:background="@color/transparent"
+        android:color="@color/transparent">
+
+        <TextView
+            android:id="@+id/notification_music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:alpha="0.55"
+            android:fontFamily="@font/geely_switches"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="12sp"
+
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="1"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+
+
+            />
+    </FrameLayout>
+
+</LinearLayout>
