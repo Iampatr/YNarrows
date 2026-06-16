@@ -64,7 +64,7 @@ public class NodeInfoForNavi extends AccessibilityService {
             if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
                 String packageName = String.valueOf(event.getPackageName());
                 //ComponentName componentName = ReflectUtil.getTopActivityByDisplayId(0);
-                Toast.makeText(getApplicationContext(), packageName, LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), packageName, LENGTH_SHORT).show();
                 //Toast.makeText(getApplicationContext(), ""+ componentName, LENGTH_SHORT).show();
 
                 if (!(packageName.equals("ru.yandex.yandexnavi")) &&

@@ -3,13 +3,16 @@ package ru.link.YNarrows;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -267,6 +270,12 @@ public class HUDActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!getIntent().getBooleanExtra("hud_instance", false)) {
+            handleLauncherStart();
+            return;
+        }
+
         setContentView(R.layout.activity_hudactivity);
 
         interceptedNotificationImageView2 = this.findViewById(R.id.intercepted_notification_arrow);
@@ -290,6 +299,23 @@ public class HUDActivity extends AppCompatActivity {
         intentFilter.addAction(ACTION_NAVIGATION_OTHER_APPS);
 
         registerReceiver(imageChangeBroadcastReceiver,intentFilter);
+    }
+
+    @SuppressLint("WrongConstant")
+    private void handleLauncherStart() {
+
+        if (!isNotificationListenerEnabled()) {
+            finish();
+            Intent settingsIntent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+            settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(settingsIntent);
+        }
+    }
+
+    private boolean isNotificationListenerEnabled() {
+        String enabledListeners = Settings.Secure.getString(
+                getContentResolver(), "enabled_notification_listeners");
+        return enabledListeners != null && enabledListeners.contains(getPackageName());
     }
 
     @Override
@@ -399,5 +425,4 @@ public class HUDActivity extends AppCompatActivity {
             }
         }.start();
     }
-
 }

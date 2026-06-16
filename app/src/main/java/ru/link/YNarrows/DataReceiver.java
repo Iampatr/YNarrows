@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Method;
 import kotlin.jvm.internal.Intrinsics;
+import ru.link.YNarrows.utils.ExeCommands;
 
 public final class DataReceiver extends BroadcastReceiver {
 
@@ -22,21 +23,36 @@ public final class DataReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intrinsics.checkNotNullParameter(context, "context");
         Intrinsics.checkNotNullParameter(intent, "intent");
-        Toast.makeText(context, "ТУТ", Toast.LENGTH_SHORT).show();
 
         try {
             if (Intrinsics.areEqual("android.intent.action.BOOT_COMPLETED", intent.getAction()) ||
                     Intrinsics.areEqual("android.intent.action.QUICKBOOT_POWERON", intent.getAction())  ||
                     Intrinsics.areEqual("android.intent.action.LOCKED_BOOT_COMPLETED", intent.getAction()) ) {
-                Toast.makeText(context, "ТУТ", Toast.LENGTH_SHORT).show();
+
+
+                //Toast.makeText(context, "Интент"+ intent.getAction(), Toast.LENGTH_SHORT).show();
+
+                new ExeCommands().run("pm grant ru.link.YNarrows android.permission.BIND_ACCESSIBILITY_SERVICE", 10000).getResult();
+                new ExeCommands().run("pm grant ru.link.YNarrows android.permission.BIND_NOTIFICATION_LISTENER_SERVICE", 10000).getResult();
+                new ExeCommands().run("pm grant ru.link.YNarrows android.permission.WRITE_SECURE_SETTINGS", 10000).getResult();
+                new ExeCommands().run("pm grant ru.link.YNarrows android.permission.DISABLE_HIDDEN_API_CHECKS", 10000).getResult();
+                new ExeCommands().run("pm grant ru.link.YNarrows android.permission.SYSTEM_ALERT_WINDOW", 10000).getResult();
+                new ExeCommands().run("pm grant ru.link.YNarrows android.permission.MANAGE_ACTIVITY_STACKS", 10000).getResult();
+                new ExeCommands().run("pm grant ru.link.YNarrows android.permission.INTERNAL_SYSTEM_WINDOW", 10000).getResult();
 
                 String access = Settings.Secure.getString(context.getContentResolver(),"enabled_accessibility_services");
-                if (!access.contains("ru.link.YNarrows/ru.link.YNarrows.NodeInfoForNavi") && !access.isEmpty())
-                {
-                    access = access+":ru.link.YNarrows/ru.link.YNarrows.NodeInfoForNavi";
+                if (!access.contains("ru.link.YNarrows/ru.link.YNarrows.NodeInfoForNavi")) {
+                    if (!access.isEmpty()) {
+                        access = access+":ru.link.YNarrows/ru.link.YNarrows.NodeInfoForNavi";
+                    }
+                    else {
+                        access = "ru.link.YNarrows/ru.link.YNarrows.NodeInfoForNavi";
+                    }
                     Settings.Secure.putString(context.getContentResolver(), "enabled_accessibility_services", access);
-                    Toast.makeText(context, access, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, access, Toast.LENGTH_SHORT).show();
                 }
+                StartHUDInfo(context);
+
             }
 
         } catch (Exception ignored) {
@@ -44,8 +60,8 @@ public final class DataReceiver extends BroadcastReceiver {
         }
 
 
-    StartHUDInfo(context);
     }
+
 
     private static void ClosePackage(Context context) {
         try {
@@ -67,6 +83,7 @@ public final class DataReceiver extends BroadcastReceiver {
 
         try {
             Intent intent4 = new Intent(context, HUDActivity.class);
+            intent4.putExtra("hud_instance", true);
             intent4.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             Rect rect = new Rect(0, 721, 1920, 1080);
             Bundle bundle  = ActivityOptions.makeBasic().setLaunchDisplayId(2).setLaunchBounds(rect).toBundle();
