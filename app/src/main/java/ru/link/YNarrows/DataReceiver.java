@@ -83,9 +83,8 @@ public final class DataReceiver extends BroadcastReceiver {
 
         try {
             Intent intent4 = new Intent(context, HUDActivity.class);
-            intent4.putExtra("hud_instance", true);
-            intent4.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            Rect rect = new Rect(0, 721, 1920, 1080);
+            intent4.setFlags(268439552);
+            Rect rect = new Rect(0, 0, 1920, 907);
             Bundle bundle  = ActivityOptions.makeBasic().setLaunchDisplayId(2).setLaunchBounds(rect).toBundle();
             bundle.putInt("android.activity.windowingMode", 5);
             context.getApplicationContext().startActivity(intent4, bundle);
