@@ -1,29 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="24dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/status_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:layout_marginBottom="24dp" />
+        android:gravity="left|center_vertical"
+        android:orientation="vertical"
+        android:padding="36dp">
 
-    <Button
-        android:id="@+id/action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="27sp"
+            android:gravity="left"
+            android:layout_marginBottom="36dp" />
 
-    <Button
-        android:id="@+id/close_hud_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Закрыть HUD"
-        android:layout_marginTop="16dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
 
-</LinearLayout>
+            <Button
+                android:id="@+id/action_button"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:background="@drawable/btn_round_green"
+                android:gravity="center"
+                android:textSize="40sp" />
+
+            <Button
+                android:id="@+id/close_hud_button"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:background="@drawable/btn_round_red"
+                android:gravity="center"
+                android:text="Стоп"
+                android:textSize="40sp"
+                android:layout_marginLeft="24dp" />
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/auto_start_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Автозапуск при загрузке"
+            android:layout_marginTop="28dp"
+            android:textSize="27sp"
+            android:button="@drawable/checkbox_selector" />
+
+        <CheckBox
+            android:id="@+id/show_borders_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Выключить рамки окон"
+            android:layout_marginTop="16dp"
+            android:textSize="27sp"
+            android:button="@drawable/checkbox_selector" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Настройка положения окон"
+            android:textSize="27sp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Стрелка"
+                android:textSize="27sp" />
+
+            <Button android:id="@+id/arrow_left" android:layout_width="72dp" android:layout_height="72dp" android:text="◄" android:textSize="27sp" />
+            <Button android:id="@+id/arrow_up" android:layout_width="72dp" android:layout_height="72dp" android:text="▲" android:textSize="27sp" />
+            <Button android:id="@+id/arrow_down" android:layout_width="72dp" android:layout_height="72dp" android:text="▼" android:textSize="27sp" />
+            <Button android:id="@+id/arrow_right" android:layout_width="72dp" android:layout_height="72dp" android:text="►" android:textSize="27sp" />
+
+            <TextView android:id="@+id/arrow_pos" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="27sp" android:layout_marginLeft="18dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Сигнал"
+                android:textSize="27sp" />
+
+            <Button android:id="@+id/speed_left" android:layout_width="72dp" android:layout_height="72dp" android:text="◄" android:textSize="27sp" />
+            <Button android:id="@+id/speed_up" android:layout_width="72dp" android:layout_height="72dp" android:text="▲" android:textSize="27sp" />
+            <Button android:id="@+id/speed_down" android:layout_width="72dp" android:layout_height="72dp" android:text="▼" android:textSize="27sp" />
+            <Button android:id="@+id/speed_right" android:layout_width="72dp" android:layout_height="72dp" android:text="►" android:textSize="27sp" />
+
+            <TextView android:id="@+id/speed_pos" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="27sp" android:layout_marginLeft="18dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Улица"
+                android:textSize="27sp" />
+
+            <Button android:id="@+id/street_left" android:layout_width="72dp" android:layout_height="72dp" android:text="◄" android:textSize="27sp" />
+            <Button android:id="@+id/street_up" android:layout_width="72dp" android:layout_height="72dp" android:text="▲" android:textSize="27sp" />
+            <Button android:id="@+id/street_down" android:layout_width="72dp" android:layout_height="72dp" android:text="▼" android:textSize="27sp" />
+            <Button android:id="@+id/street_right" android:layout_width="72dp" android:layout_height="72dp" android:text="►" android:textSize="27sp" />
+
+            <TextView android:id="@+id/street_pos" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="27sp" android:layout_marginLeft="18dp" />
+            <Button android:id="@+id/street_height_up" android:layout_width="72dp" android:layout_height="72dp" android:text="+" android:textSize="27sp" android:layout_marginLeft="18dp" />
+            <Button android:id="@+id/street_height_down" android:layout_width="72dp" android:layout_height="72dp" android:text="-" android:textSize="27sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

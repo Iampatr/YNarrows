@@ -6,6 +6,7 @@ import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -25,6 +26,11 @@ public final class DataReceiver extends BroadcastReceiver {
         Intrinsics.checkNotNullParameter(intent, "intent");
 
         try {
+            SharedPreferences prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+            if (!prefs.getBoolean("auto_start", true)) {
+                return;
+            }
+
             if (Intrinsics.areEqual("android.intent.action.BOOT_COMPLETED", intent.getAction()) ||
                     Intrinsics.areEqual("android.intent.action.QUICKBOOT_POWERON", intent.getAction())  ||
                     Intrinsics.areEqual("android.intent.action.LOCKED_BOOT_COMPLETED", intent.getAction()) ) {

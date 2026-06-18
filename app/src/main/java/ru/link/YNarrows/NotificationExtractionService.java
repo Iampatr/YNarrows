@@ -1,5 +1,7 @@
 package ru.link.YNarrows;
 
+import static android.view.View.VISIBLE;
+
 import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
