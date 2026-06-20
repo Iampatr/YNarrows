@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.MANAGE_ACTIVITY_STACKS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.GRANT_RUNTIME_PERMISSIONS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" tools:ignore="ProtectedPermissions" />
 
 
     <application
@@ -31,15 +32,18 @@
             android:name=".HUDActivity"
             android:exported="true"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
+            android:resizeableActivity="true"
             android:theme="@style/AppTheme"
-            android:taskAffinity=""
+            android:taskAffinity=".hudtask"
             >
         </activity>
 
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
+            android:launchMode="singleTask"
+            android:resizeableActivity="true"
+            android:taskAffinity=".settings"
             android:theme="@style/Theme.Settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

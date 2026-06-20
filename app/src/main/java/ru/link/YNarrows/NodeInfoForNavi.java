@@ -59,7 +59,6 @@ public class NodeInfoForNavi extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-
         try {
             if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
                 String packageName = String.valueOf(event.getPackageName());
@@ -92,7 +91,7 @@ public class NodeInfoForNavi extends AccessibilityService {
                 if (nodeInfo != null) {
                     Object PackName = nodeInfo.getPackageName();
                     if (String.valueOf(PackName).equals("ru.yandex.yandexnavi")) {
-
+                        HUDActivity.checkAndRestore(getApplicationContext());
                         //перед каждым событием подразумеваем, что нужный node отсутсвует
                         maneuverVEx = false;
                         distanceVEx = false;

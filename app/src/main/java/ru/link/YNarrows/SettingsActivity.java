@@ -22,7 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
     private String strResult = "";
     private SharedPreferences prefs;
     private static final String PREF_AUTO_START = "auto_start";
-    private static final String PREF_HUD_RUNNING = "hud_running";
+    private static final String PREF_HUD_RUNNING = "hud_system_running";
     private Button arrowLeft, arrowUp, arrowDown, arrowRight;
     private Button speedLeft, speedUp, speedDown, speedRight;
     private Button streetLeft, streetUp, streetDown, streetRight;
@@ -43,11 +43,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         autoStartCheckbox.setChecked(prefs.getBoolean(PREF_AUTO_START, true));
         autoStartCheckbox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                prefs.edit().putBoolean(PREF_AUTO_START, isChecked).apply());
+                prefs.edit().putBoolean(PREF_AUTO_START, isChecked).commit());
 
-        showBordersCheckbox.setChecked(!prefs.getBoolean(HUDActivity.PREF_SHOW_BORDERS, true));
+        showBordersCheckbox.setChecked(!prefs.getBoolean(HUDActivity.PREF_SHOW_BORDERS, false));
         showBordersCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit().putBoolean(HUDActivity.PREF_SHOW_BORDERS, !isChecked).apply();
+            prefs.edit().putBoolean(HUDActivity.PREF_SHOW_BORDERS, !isChecked).commit();
             Intent intent = new Intent(HUDActivity.UPDATE_BORDERS_ACTION);
             intent.putExtra(HUDActivity.PREF_SHOW_BORDERS, !isChecked);
             intent.setPackage(getPackageName());
@@ -55,11 +55,11 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         closeHudButton.setOnClickListener(v -> {
+            prefs.edit().putBoolean(PREF_HUD_RUNNING, false).commit();
             Intent intent = new Intent(HUDActivity.CLOSE_HUD_ACTION);
             intent.putExtra("close", true);
             intent.setPackage(getPackageName());
             sendBroadcast(intent);
-            prefs.edit().putBoolean(PREF_HUD_RUNNING, false).apply();
             setMoveButtonsEnabled(false);
         });
 
@@ -100,12 +100,14 @@ public class SettingsActivity extends AppCompatActivity {
 
         checkHudRunning();
 
+
         actionButton.setText("Старт");
         actionButton.setOnClickListener(v -> startHUD());
         if (isNotificationListenerEnabled()) {
             statusText.setText("Статус: права Notification Listener предоставлены");
         } else {
             statusText.setText("Статус: требуется включить Notification Listener (нажмите для перехода)");
+            statusText.setTextColor(0xFFFF0000);
             statusText.setOnClickListener(v -> {
                 Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -127,9 +129,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void checkHudRunning() {
-        FindMyStack();
-        boolean running = !strResult.isEmpty();
-        prefs.edit().putBoolean(PREF_HUD_RUNNING, running).apply();
+        boolean running = prefs.getBoolean(PREF_HUD_RUNNING, false);
         setMoveButtonsEnabled(running);
     }
 
@@ -137,23 +137,15 @@ public class SettingsActivity extends AppCompatActivity {
     private void startHUD() {
         Intent intent4 = new Intent(this, HUDActivity.class);
         intent4.setFlags(268439552);
-        Rect rect = new Rect(0, 0, 1920, 907);
-        Bundle bundle  = ActivityOptions.makeBasic().setLaunchBounds(rect).toBundle();
+        Rect rect = new Rect(0, 0, 1920, 1080);
+        Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(rect).toBundle();
         bundle.putInt("android.activity.windowingMode", 5);
         this.getApplicationContext().startActivity(intent4, bundle);
         FindMyStack();
         if (!strResult.isEmpty()) {
-            String str2 = new ExeCommands().run("am display move-stack " + strResult + " 2", 10000).getResult();
-            prefs.edit().putBoolean(PREF_HUD_RUNNING, true).apply();
+            new ExeCommands().run("am display move-stack " + strResult + " 2", 10000);
+            prefs.edit().putBoolean(PREF_HUD_RUNNING, true).commit();
             setMoveButtonsEnabled(true);
-        }
-        else {
-            Intent intent = new Intent(HUDActivity.CLOSE_HUD_ACTION);
-            intent.putExtra("close", true);
-            intent.setPackage(getPackageName());
-            sendBroadcast(intent);
-            prefs.edit().putBoolean(PREF_HUD_RUNNING, false).apply();
-            setMoveButtonsEnabled(false);
         }
     }
 

@@ -26,12 +26,7 @@ public final class DataReceiver extends BroadcastReceiver {
         Intrinsics.checkNotNullParameter(intent, "intent");
 
         try {
-            SharedPreferences prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
-            if (!prefs.getBoolean("auto_start", true)) {
-                return;
-            }
-
-            if (Intrinsics.areEqual("android.intent.action.BOOT_COMPLETED", intent.getAction()) ||
+             if (Intrinsics.areEqual("android.intent.action.BOOT_COMPLETED", intent.getAction()) ||
                     Intrinsics.areEqual("android.intent.action.QUICKBOOT_POWERON", intent.getAction())  ||
                     Intrinsics.areEqual("android.intent.action.LOCKED_BOOT_COMPLETED", intent.getAction()) ) {
 
@@ -57,7 +52,21 @@ public final class DataReceiver extends BroadcastReceiver {
                     Settings.Secure.putString(context.getContentResolver(), "enabled_accessibility_services", access);
                     //Toast.makeText(context, access, Toast.LENGTH_SHORT).show();
                 }
-                StartHUDInfo(context);
+
+
+                 SharedPreferences prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+                 boolean autoStart = prefs.getBoolean("auto_start", true);
+                 Log.d("DataReceiver", "auto_start=" + autoStart + " action=" + intent.getAction());
+
+                 prefs.edit().putBoolean("hud_system_running", false).commit();
+
+                 if (!autoStart) {
+                     return;
+                 }
+
+                 prefs.edit().putBoolean("hud_system_running", false).commit();
+                 StartHUDInfo(context);
+
 
             }
 
@@ -88,12 +97,15 @@ public final class DataReceiver extends BroadcastReceiver {
     private static void StartHUDInfo(Context context) {
 
         try {
+
             Intent intent4 = new Intent(context, HUDActivity.class);
             intent4.setFlags(268439552);
-            Rect rect = new Rect(0, 0, 1920, 907);
+            Rect rect = new Rect(0, 0, 1920, 1080);
             Bundle bundle  = ActivityOptions.makeBasic().setLaunchDisplayId(2).setLaunchBounds(rect).toBundle();
             bundle.putInt("android.activity.windowingMode", 5);
             context.getApplicationContext().startActivity(intent4, bundle);
+            SharedPreferences prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+            prefs.edit().putBoolean("hud_system_running", true).commit();
 
         } catch (Exception ignored) {
         }

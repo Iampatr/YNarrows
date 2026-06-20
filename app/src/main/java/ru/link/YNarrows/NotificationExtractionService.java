@@ -42,12 +42,13 @@ public class NotificationExtractionService extends NotificationListenerService {
     }
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
-
+        //HUDActivity.checkAndRestore(getApplicationContext());
         try {
             int notificationCode = matchNotificationCode(sbn);
 
             switch (notificationCode) {
                 case 1:
+                    HUDActivity.checkAndRestore(getApplicationContext());
                     Notification notification = sbn.getNotification();
 
                     //String kind = "bigContentView";//включает информацию о ETA
@@ -352,7 +353,7 @@ public class NotificationExtractionService extends NotificationListenerService {
 
 
                 case 2://Стрелки 2 ГИС
-
+                    HUDActivity.checkAndRestore(getApplicationContext());
                     Intent intent = new Intent("other_apps");
                     intent.putExtra("Notification Code", notificationCode);
 

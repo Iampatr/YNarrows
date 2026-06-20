@@ -3,15 +3,18 @@ package ru.link.YNarrows;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.provider.Settings;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,16 +23,56 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.Objects;
 import kotlin.jvm.internal.Intrinsics;
+import ru.link.YNarrows.utils.ExeCommands;
 
 public class HUDActivity extends AppCompatActivity {
     public static final String PREF_SHOW_BORDERS = "show_borders";
+    private static long lastRestoreAttempt = 0;
+
+    @SuppressLint("WrongConstant")
+    public static void checkAndRestore(Context context) {
+
+        //Не надо часто проверять. Иногда)))
+        long now = System.currentTimeMillis();
+        if (now - lastRestoreAttempt < 5000) return;
+        lastRestoreAttempt = now;
+
+        SharedPreferences prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        boolean hud_system_running = prefs.getBoolean("hud_system_running", false);
+
+        if (hud_system_running)    {
+            String result = new ExeCommands().run("am stack list", 5000).getResult();
+            if (!result.contains("ru.link.YNarrows/ru.link.YNarrows.HUDActivity")) {
+                try {
+                    Intent intent = new Intent(context, HUDActivity.class);
+                    intent.setFlags(268439552);
+                    Rect rect = new Rect(0, 0, 1920, 1080);
+                    Bundle bundle = ActivityOptions.makeBasic().setLaunchBounds(rect).toBundle();
+                    bundle.putInt("android.activity.windowingMode", 5);
+                    context.getApplicationContext().startActivity(intent, bundle);
+
+                    String result2 = new ExeCommands().run("am stack list", 5000).getResult();
+                    String[] chunks = result2.split("Stack id=");
+                    for (String chunk : chunks) {
+                        if (chunk.contains("ru.link.YNarrows/ru.link.YNarrows.HUDActivity")) {
+                            int spaceIdx = chunk.indexOf(' ');
+                            String stackId = spaceIdx > 0 ? chunk.substring(0, spaceIdx) : chunk;
+                            new ExeCommands().run("am display move-stack " + stackId + " 2", 5000);
+                            break;
+                        }
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }
+    }
+
     private SharedPreferences prefs;
     private FrameLayout fragmentBorderArrow;
     private FrameLayout fragmentBorderSpeed;
     private FrameLayout fragmentBorderStreet;
     private Handler borderTimer = new Handler();
     private Runnable revertBordersRunnable;
-
     public static String TitlePrev1 = null;
     public static Boolean ArrowTimerIsStarted = false;
     public static Boolean GISTimerIsStarted = false;
@@ -336,11 +379,21 @@ public class HUDActivity extends AppCompatActivity {
                             break;
 
                         case CLOSE_HUD_ACTION:
+                            String result = new ExeCommands().run("am stack list", 5000).getResult();
+                            String[] chunks = result.split("Stack id=");
+                            for (String chunk : chunks) {
+                                if (chunk.contains("ru.link.YNarrows/ru.link.YNarrows.HUDActivity")) {
+                                    int spaceIdx = chunk.indexOf(' ');
+                                    String stackId = spaceIdx > 0 ? chunk.substring(0, spaceIdx) : chunk;
+                                    new ExeCommands().run("am stack remove " + stackId, 5000);
+                                    break;
+                                }
+                            }
                             finish();
                             break;
 
                         case UPDATE_BORDERS_ACTION:
-                            boolean show = extras.getBoolean(PREF_SHOW_BORDERS, true);
+                            boolean show = extras.getBoolean(PREF_SHOW_BORDERS, false);
                             int res = show ? R.drawable.inner_fragment_border : R.drawable.inner_fragment_border_transparent;
                             fragmentBorderArrow.setBackgroundResource(res);
                             fragmentBorderSpeed.setBackgroundResource(res);
@@ -378,15 +431,22 @@ public class HUDActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String access = Settings.Secure.getString(getContentResolver(), "enabled_accessibility_services");
+        if (access != null && !access.contains("ru.link.YNarrows/ru.link.YNarrows.NodeInfoForNavi")) {
+            access = access.isEmpty()
+                    ? "ru.link.YNarrows/ru.link.YNarrows.NodeInfoForNavi"
+                    : access + ":ru.link.YNarrows/ru.link.YNarrows.NodeInfoForNavi";
+            Settings.Secure.putString(getContentResolver(), "enabled_accessibility_services", access);
+        }
+
         setContentView(R.layout.activity_hudactivity);
 
         prefs = getSharedPreferences("settings", MODE_PRIVATE);
-
         fragmentBorderArrow = findViewById(R.id.fragment_border_arrow);
         fragmentBorderSpeed = findViewById(R.id.fragment_border_speed);
         fragmentBorderStreet = findViewById(R.id.fragment_border_street);
 
-        boolean showBorders = prefs.getBoolean(PREF_SHOW_BORDERS, true);
+        boolean showBorders = prefs.getBoolean(PREF_SHOW_BORDERS, false);
         int borderRes = showBorders ? R.drawable.inner_fragment_border : R.drawable.inner_fragment_border_transparent;
         fragmentBorderArrow.setBackgroundResource(borderRes);
         fragmentBorderSpeed.setBackgroundResource(borderRes);
@@ -437,7 +497,6 @@ public class HUDActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(imageChangeBroadcastReceiver);
-        prefs.edit().putBoolean("hud_running", false).apply();
     }
 
     @Override
@@ -582,7 +641,7 @@ public class HUDActivity extends AppCompatActivity {
         fragmentBorderStreet.setBackgroundResource(res);
         revertBordersRunnable = () -> {
             isAdjusting = false;
-            boolean show = prefs.getBoolean(PREF_SHOW_BORDERS, true);
+            boolean show = prefs.getBoolean(PREF_SHOW_BORDERS, false);
             int borderRes = show ? R.drawable.inner_fragment_border : R.drawable.inner_fragment_border_transparent;
             fragmentBorderArrow.setBackgroundResource(borderRes);
             fragmentBorderSpeed.setBackgroundResource(borderRes);

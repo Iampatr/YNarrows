@@ -52,7 +52,7 @@
             android:id="@+id/auto_start_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Автозапуск при загрузке"
+            android:text="Активация стрелок при старте системы"
             android:layout_marginTop="28dp"
             android:textSize="27sp"
             android:button="@drawable/checkbox_selector" />
