@@ -40,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
         Button closeHudButton = findViewById(R.id.close_hud_button);
         CheckBox autoStartCheckbox = findViewById(R.id.auto_start_checkbox);
         CheckBox showBordersCheckbox = findViewById(R.id.show_borders_checkbox);
+        CheckBox hideStreetCheckbox = findViewById(R.id.hide_street_checkbox);
 
         autoStartCheckbox.setChecked(prefs.getBoolean(PREF_AUTO_START, true));
         autoStartCheckbox.setOnCheckedChangeListener((buttonView, isChecked) ->
@@ -50,6 +51,15 @@ public class SettingsActivity extends AppCompatActivity {
             prefs.edit().putBoolean(HUDActivity.PREF_SHOW_BORDERS, !isChecked).commit();
             Intent intent = new Intent(HUDActivity.UPDATE_BORDERS_ACTION);
             intent.putExtra(HUDActivity.PREF_SHOW_BORDERS, !isChecked);
+            intent.setPackage(getPackageName());
+            sendBroadcast(intent);
+        });
+
+        hideStreetCheckbox.setChecked(prefs.getBoolean(HUDActivity.PREF_HIDE_STREET, false));
+        hideStreetCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean(HUDActivity.PREF_HIDE_STREET, isChecked).commit();
+            Intent intent = new Intent(HUDActivity.UPDATE_HIDE_STREET_ACTION);
+            intent.putExtra(HUDActivity.PREF_HIDE_STREET, isChecked);
             intent.setPackage(getPackageName());
             sendBroadcast(intent);
         });

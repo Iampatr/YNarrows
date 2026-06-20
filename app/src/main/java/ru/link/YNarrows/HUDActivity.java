@@ -27,6 +27,8 @@ import ru.link.YNarrows.utils.ExeCommands;
 
 public class HUDActivity extends AppCompatActivity {
     public static final String PREF_SHOW_BORDERS = "show_borders";
+    public static final String PREF_HIDE_STREET = "hide_street";
+    public static final String UPDATE_HIDE_STREET_ACTION = "ru.link.YNarrows.UPDATE_HIDE_STREET";
     private static long lastRestoreAttempt = 0;
 
     @SuppressLint("WrongConstant")
@@ -300,7 +302,7 @@ public class HUDActivity extends AppCompatActivity {
                                     if (!isAdjusting) fragmentBorderStreet.setVisibility(INVISIBLE);
                                 }
                                 else {
-                                    fragmentBorderStreet.setVisibility(VISIBLE);
+                                    if (!prefs.getBoolean(PREF_HIDE_STREET, false)) fragmentBorderStreet.setVisibility(VISIBLE);
                                 }
                                 interceptedNotificationTXTView4.setText(street);
                             }
@@ -400,6 +402,15 @@ public class HUDActivity extends AppCompatActivity {
                             fragmentBorderStreet.setBackgroundResource(res);
                             break;
 
+                        case UPDATE_HIDE_STREET_ACTION:
+                            boolean hide = extras.getBoolean(PREF_HIDE_STREET, false);
+                            if (hide && !isAdjusting) {
+                                fragmentBorderStreet.setVisibility(INVISIBLE);
+                            } else if (!hide && interceptedNotificationTXTView4.getText().length() > 0) {
+                                fragmentBorderStreet.setVisibility(VISIBLE);
+                            }
+                            break;
+
                         case MOVE_FRAGMENT_ACTION:
                             String frag = extras.getString(EXTRA_FRAGMENT, "");
                             int dx = extras.getInt(EXTRA_DX, 0);
@@ -487,6 +498,7 @@ public class HUDActivity extends AppCompatActivity {
         intentFilter.addAction(ACTION_NAVIGATION_OTHER_APPS);
         intentFilter.addAction(CLOSE_HUD_ACTION);
         intentFilter.addAction(UPDATE_BORDERS_ACTION);
+        intentFilter.addAction(UPDATE_HIDE_STREET_ACTION);
         intentFilter.addAction(MOVE_FRAGMENT_ACTION);
         intentFilter.addAction(UPDATE_HEIGHT_ACTION);
 
@@ -546,7 +558,7 @@ public class HUDActivity extends AppCompatActivity {
                         if (!isAdjusting) fragmentBorderStreet.setVisibility(INVISIBLE);
                     }
                     else {
-                        fragmentBorderStreet.setVisibility(VISIBLE);
+                        if (!prefs.getBoolean(PREF_HIDE_STREET, false)) fragmentBorderStreet.setVisibility(VISIBLE);
                     }
                 }
                 if(GISTimer != null) {
